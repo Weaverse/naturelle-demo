@@ -9,7 +9,7 @@ FROM base as build
 
 WORKDIR /myapp
 ADD . .
-RUN npm install --package-lock=false
+RUN npm ci
 
 RUN npx --yes patch-package
 
