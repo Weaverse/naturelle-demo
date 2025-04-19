@@ -29,6 +29,12 @@ RUN set -e && \
         sed -i -e 's|host: "localhost"|host: "0.0.0.0"|' "$WORKERD_FILE"; \
     else \
         echo "workerd file not found" && exit 1; \
+    fi && \
+    HYDROGEN_WORKERD_FILE="node_modules/@shopify/cli-hydrogen/dist/lib/mini-oxygen/workerd.js" && \
+    if [ -f "$HYDROGEN_WORKERD_FILE" ]; then \
+        sed -i -e 's|host: "localhost"|host: "0.0.0.0"|' "$HYDROGEN_WORKERD_FILE"; \
+    else \
+        echo "hydrogen workerd file not found" && exit 1; \
     fi
 
 # Build the app
