@@ -22,21 +22,6 @@ RUN npm ci
 # Copy source files
 COPY . .
 
-# Replace localhost with 0.0.0.0 (Linux compatible version)
-RUN set -e && \
-    WORKERD_FILE=$(find node_modules/@shopify/cli/dist -type f -name "workerd-*.js") && \
-    if [ -f "$WORKERD_FILE" ]; then \
-        sed -i -e 's|host: "localhost"|host: "0.0.0.0"|' "$WORKERD_FILE"; \
-    else \
-        echo "workerd file not found" && exit 1; \
-    fi && \
-    HYDROGEN_WORKERD_FILE="node_modules/@shopify/cli-hydrogen/dist/lib/mini-oxygen/workerd.js" && \
-    if [ -f "$HYDROGEN_WORKERD_FILE" ]; then \
-        sed -i -e 's|host: "localhost"|host: "0.0.0.0"|' "$HYDROGEN_WORKERD_FILE"; \
-    else \
-        echo "hydrogen workerd file not found" && exit 1; \
-    fi
-
 # Build the app
 RUN npm run build
 
