@@ -22,6 +22,13 @@ RUN npm ci
 # Copy source files
 COPY . .
 
+# 0.0.0.0 Super-Patch (Ensures app is reachable on Fly.io)
+RUN set -e && \
+    # Find all relevant JS files in @shopify and miniflare directories and replace localhost/127.0.0.1 with 0.0.0.0
+    find node_modules/@shopify node_modules/miniflare -type f -name "*.js" | xargs grep -lE 'host: "localhost"|host: "127.0.0.1"|"127.0.0.1"' | \
+    xargs -r sed -i -e 's|host: "localhost"|host: "0.0.0.0"|g' -e 's|host: "127.0.0.1"|host: "0.0.0.0"|g' -e 's|"127.0.0.1"|"0.0.0.0"|g' || \
+    echo "No matching files found to patch"
+
 # Build the app
 RUN npm run build
 
